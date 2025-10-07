@@ -1,0 +1,8 @@
+{
+  "name": "radix-autocomplete",
+  "private": false,
+  "workspaces": ["backend", "frontend"],
+  "scripts": {
+    "start": "npm run dev --workspace frontend & npm run dev --workspace backend"
+  }
+}
