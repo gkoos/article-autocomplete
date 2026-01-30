@@ -39,10 +39,14 @@ export class RadixTree {
         newChild.children = childNode.children;
         newChild.count = childNode.count;
 
-        // Update the current child to the common prefix
-        childNode.label = childLabel.slice(0, commonLength);
+        const prefixLabel = childLabel.slice(0, commonLength);
+        childNode.label = prefixLabel;
         childNode.children = new Map([[splitLabel, newChild]]);
         childNode.count = 0;
+
+        // Re-key the parent's children map to reflect the updated label
+        node.children.delete(childLabel);
+        node.children.set(prefixLabel, childNode);
 
         // Insert the remaining part of the phrase as a new child
         const remaining = phrase.slice(commonLength);
@@ -97,8 +101,8 @@ export class RadixTree {
       const commonLength = this._commonPrefixLength(prefix, childLabel);
       if (commonLength === 0) continue;
       if (commonLength < prefix.length && commonLength < childLabel.length) {
-        // Prefix diverges before edge ends: no match
-        return null;
+        // Diverges within this edge; try other children
+        continue;
       }
       if (commonLength === prefix.length) {
         // Prefix ends inside this edge or at the end of the edge
