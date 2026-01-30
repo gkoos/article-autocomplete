@@ -3,6 +3,11 @@
   "private": false,
   "workspaces": ["backend", "frontend"],
   "scripts": {
-    "start": "npm run dev --workspace frontend & npm run dev --workspace backend"
+    "start": "concurrently -k -n FRONTEND,BACKEND -c green,blue \"npm run dev --workspace frontend\" \"npm run dev --workspace backend\"",
+    "start:frontend": "npm run dev --workspace frontend",
+    "start:backend": "npm run dev --workspace backend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
